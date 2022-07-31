@@ -9,8 +9,6 @@ This should allow faster iteration time and a lighter workload on Pi-Star mainta
 ## TODO
 
 - make libwxbase in Bazel
-- convert loose scripts to usable form
-- Delete config_clean.zip if not used anywhere
 - Fixup Dockerfile building with libusb
 - eventually make an OS image
 - add bazel tests

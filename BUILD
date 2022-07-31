@@ -38,5 +38,7 @@ pkg_zip(
         "@P25Clients//:P25Gateway",
         "@P25Clients//:P25Parrot",
         "@teensy_loader_cli//:teensy_loader_cli",
+        "//wrappers:wrappers",
+        "//platform:platformDetect",
     ],
 )

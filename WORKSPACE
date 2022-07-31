@@ -24,6 +24,18 @@ load("@rules_pkg//pkg:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
 
+http_archive(
+    name = "rules_sh",
+    # Replace git revision and sha256.
+    # sha256 = "0000000000000000000000000000000000000000000000000000000000000000",
+    strip_prefix = "rules_sh-06170f1fbff23f900bc04dfbdb75ed1acf2b8c42",
+    urls = ["https://github.com/tweag/rules_sh/archive/06170f1fbff23f900bc04dfbdb75ed1acf2b8c42.tar.gz"],
+)
+
+load("@rules_sh//sh:repositories.bzl", "rules_sh_dependencies")
+
+rules_sh_dependencies()
+
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
 
 new_git_repository(
