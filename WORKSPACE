@@ -198,3 +198,10 @@ new_git_repository(
     remote = "https://github.com/USA-RedDragon/Pi-Star_Binaries_sbin.git",
     build_file = "Pi-Star_Binaries_sbin/BUILD",
 )
+
+new_git_repository(
+    name = "Pi-Star_DV_Dash",
+    branch = "M17",
+    remote = "https://github.com/USA-RedDragon/Pi-Star_DV_Dash.git",
+    build_file = "Pi-Star_DV_Dash/BUILD",
+)

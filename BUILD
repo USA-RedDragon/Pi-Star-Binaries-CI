@@ -99,6 +99,15 @@ pkg_files(
     strip_prefix = strip_prefix.from_pkg(""),
 )
 
+pkg_files(
+    name = "dashboard",
+    srcs = [
+        "@Pi-Star_DV_Dash//:Pi-Star_DV_Dash",
+    ],
+    prefix = "var/www/dashboard",
+    strip_prefix = strip_prefix.from_pkg(""),
+)
+
 pkg_zip(
     name = "package",
     srcs = [
@@ -106,6 +115,7 @@ pkg_zip(
         ":binaries",
         ":scripts",
         ":libs",
+        ":dashboard",
         ":include-wiringPi",
         "//platform:platformDetect",
         ":rpi-firmware",
