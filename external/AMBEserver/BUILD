@@ -1,17 +1,12 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "AMBEserver-bin",
     srcs = glob(["**"]),
-)
+    outs = ["AMBEserver"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "AMBEserver",
-    targets = ["AMBEserver"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/AMBEserver AMBEserver
+cp external/AMBEserver/AMBEserver $(location AMBEserver)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["AMBEserver"],
-    out_bin_dir = ".",
-    postfix_script = "cp AMBEserver $INSTALLDIR"
 )

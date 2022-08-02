@@ -1,28 +1,25 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "NXDNGateway-bin",
     srcs = glob(["**"]),
+    outs = ["NXDNGateway"],
+    cmd = """
+set -euo pipefail
+
+make -C external/NXDNClients NXDNGateway
+cp external/NXDNClients/NXDNGateway/NXDNGateway $(location NXDNGateway)
+""",
+    visibility = ["//visibility:public"],
 )
 
-make(
-    name = "NXDNGateway",
-    targets = ["NXDNGateway"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
-    visibility = ["//visibility:public"],
-    out_binaries = ["NXDNGateway"],
-    out_bin_dir = ".",
-    postfix_script = "cp NXDNGateway/NXDNGateway $INSTALLDIR",
-)
+genrule(
+    name = "NXDNParrot-bin",
+    srcs = glob(["**"]),
+    outs = ["NXDNParrot"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "NXDNParrot",
-    targets = ["NXDNParrot"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/NXDNClients NXDNParrot
+cp external/NXDNClients/NXDNParrot/NXDNParrot $(location NXDNParrot)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["NXDNParrot"],
-    out_bin_dir = ".",
-    postfix_script = "cp NXDNParrot/NXDNParrot $INSTALLDIR",
 )

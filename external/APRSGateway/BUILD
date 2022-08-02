@@ -1,17 +1,12 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "APRSGateway-bin",
     srcs = glob(["**"]),
-)
+    outs = ["APRSGateway"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "APRSGateway",
-    targets = ["APRSGateway"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/APRSGateway APRSGateway
+cp external/APRSGateway/APRSGateway $(location APRSGateway)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["APRSGateway"],
-    out_bin_dir = ".",
-    postfix_script = "cp APRSGateway $INSTALLDIR"
 )

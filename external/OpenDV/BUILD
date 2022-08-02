@@ -1,20 +1,20 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make")
+files = glob(["**"])
+files.extend(["@WiringPi//:libwiringPi", "@WiringPi//:libwiringPiDev", "@WiringPi//:WiringPiHeaders-group", "@WiringPi//:WiringPiDevHeaders-group"])
 
-filegroup(
-    name = "all_srcs",
-    srcs = glob(["**"]),
-)
+genrule(
+    name = "dstarrepeaterdaemon-bin",
+    srcs = files,
+    outs = ["dstarrepeaterd"],
+    cmd = """
+set -euo pipefail
 
-configure_make(
-    name = "dstarrepeaterdaemon",
-    targets = ["dstarrepeaterd"],
-    args = ["-j$$(nproc)$$"],
-    lib_source = ":all_srcs",
+export CFLAGS="-I$$(pwd)/external/WiringPi/wiringPi -I$$(pwd)/external/WiringPi/devLib"
+export CXXFLAGS="$${CFLAGS}"
+export LDFLAGS="-L$$(pwd)/$(BINDIR)/external/WiringPi"
+
+( cd external/OpenDV && ./configure --with-gpio)
+make -C external/OpenDV dstarrepeaterd
+cp -v external/OpenDV/dstarrepeaterd $(location dstarrepeaterd)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["dstarrepeaterd"],
-    out_bin_dir = ".",
-    configure_in_place = True,
-    configure_options = ["--with-gpio"],
-    postfix_script = "cp dstarrepeaterd $INSTALLDIR",
-    deps = [ "@WiringPi//:WiringPi", "@WiringPi//:WiringPiHeaders" ],
 )

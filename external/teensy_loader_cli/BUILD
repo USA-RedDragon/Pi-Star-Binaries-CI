@@ -1,17 +1,12 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "teensy_loader_cli-bin",
     srcs = glob(["**"]),
-)
+    outs = ["teensy_loader_cli"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "teensy_loader_cli",
-    targets = ["teensy_loader_cli"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/teensy_loader_cli teensy_loader_cli
+cp external/teensy_loader_cli/teensy_loader_cli $(location teensy_loader_cli)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["teensy_loader_cli"],
-    out_bin_dir = ".",
-    postfix_script = "cp teensy_loader_cli $INSTALLDIR",
 )

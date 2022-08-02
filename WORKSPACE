@@ -15,12 +15,14 @@ rules_foreign_cc_dependencies()
 
 http_archive(
     name = "rules_pkg",
-    sha256 = "5909da90955dbb0eb434724f951f1f947a1794c5f33e345175a0193972aac14d",
-    strip_prefix = "rules_pkg-7f7bcf9c93bed9ee693b5bfedde5d72f9a2d6ea4",
-    url = "https://github.com/bazelbuild/rules_pkg/archive/7f7bcf9c93bed9ee693b5bfedde5d72f9a2d6ea4.tar.gz",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.7.0/rules_pkg-0.7.0.tar.gz",
+        "https://github.com/bazelbuild/rules_pkg/releases/download/0.7.0/rules_pkg-0.7.0.tar.gz",
+    ],
+    sha256 = "8a298e832762eda1830597d64fe7db58178aa84cd5926d76d5b744d6558941c2",
 )
 
-load("@rules_pkg//pkg:deps.bzl", "rules_pkg_dependencies")
+load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
 
@@ -181,4 +183,18 @@ new_git_repository(
     branch = "master",
     remote = "https://github.com/PaulStoffregen/teensy_loader_cli.git",
     build_file = "teensy_loader_cli/BUILD",
+)
+
+new_git_repository(
+    name = "rpi-firmware",
+    branch = "master",
+    remote = "https://github.com/raspberrypi/rpi-firmware.git",
+    build_file = "rpi-firmware/BUILD",
+)
+
+new_git_repository(
+    name = "Pi-Star_Binaries_sbin",
+    branch = "M17",
+    remote = "https://github.com/USA-RedDragon/Pi-Star_Binaries_sbin.git",
+    build_file = "Pi-Star_Binaries_sbin/BUILD",
 )

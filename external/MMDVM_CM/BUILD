@@ -5,86 +5,80 @@ filegroup(
     srcs = glob(["**"]),
 )
 
-make(
-    name = "DMR2NXDN",
-    targets = ["DMR2NXDN"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "DMR2NXDN-bin",
+    srcs = glob(["**"]),
+    outs = ["DMR2NXDN"],
+    cmd = """
+set -euo pipefail
+
+make -C external/MMDVM_CM DMR2NXDN
+cp external/MMDVM_CM/DMR2NXDN/DMR2NXDN $(location DMR2NXDN)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["DMR2NXDN"],
-    out_bin_dir = ".",
-    env = {
-        "CXX": "/usr/bin/g++"
-    },
-    postfix_script = "cp DMR2NXDN/DMR2NXDN $INSTALLDIR",
 )
 
-make(
-    name = "DMR2YSF",
-    targets = ["DMR2YSF"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "DMR2YSF-bin",
+    srcs = glob(["**"]),
+    outs = ["DMR2YSF"],
+    cmd = """
+set -euo pipefail
+
+make -C external/MMDVM_CM DMR2YSF
+cp external/MMDVM_CM/DMR2YSF/DMR2YSF $(location DMR2YSF)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["DMR2YSF"],
-    out_bin_dir = ".",
-    env = {
-        "CXX": "/usr/bin/g++"
-    },
-    postfix_script = "cp DMR2YSF/DMR2YSF $INSTALLDIR",
 )
 
-make(
-    name = "YSF2DMR",
-    targets = ["YSF2DMR"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "YSF2DMR-bin",
+    srcs = glob(["**"]),
+    outs = ["YSF2DMR"],
+    cmd = """
+set -euo pipefail
+
+make -C external/MMDVM_CM YSF2DMR
+cp external/MMDVM_CM/YSF2DMR/YSF2DMR $(location YSF2DMR)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["YSF2DMR"],
-    out_bin_dir = ".",
-    env = {
-        "CXX": "/usr/bin/g++"
-    },
-    postfix_script = "cp YSF2DMR/YSF2DMR $INSTALLDIR",
 )
 
-make(
-    name = "YSF2NXDN",
-    targets = ["YSF2NXDN"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "YSF2NXDN-bin",
+    srcs = glob(["**"]),
+    outs = ["YSF2NXDN"],
+    cmd = """
+set -euo pipefail
+
+make -C external/MMDVM_CM YSF2NXDN
+cp external/MMDVM_CM/YSF2NXDN/YSF2NXDN $(location YSF2NXDN)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["YSF2NXDN"],
-    out_bin_dir = ".",
-    env = {
-        "CXX": "/usr/bin/g++"
-    },
-    postfix_script = "cp YSF2NXDN/YSF2NXDN $INSTALLDIR",
 )
 
-make(
-    name = "YSF2P25",
-    targets = ["YSF2P25"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "YSF2P25-bin",
+    srcs = glob(["**"]),
+    outs = ["YSF2P25"],
+    cmd = """
+set -euo pipefail
+
+make -C external/MMDVM_CM YSF2P25
+cp external/MMDVM_CM/YSF2P25/YSF2P25 $(location YSF2P25)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["YSF2P25"],
-    out_bin_dir = ".",
-    env = {
-        "CXX": "/usr/bin/g++"
-    },
-    postfix_script = "cp YSF2P25/YSF2P25 $INSTALLDIR",
 )
 
-make(
-    name = "NXDN2DMR",
-    targets = ["NXDN2DMR"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "NXDN2DMR-bin",
+    srcs = glob(["**"]),
+    outs = ["NXDN2DMR"],
+    cmd = """
+set -euo pipefail
+
+make -C external/MMDVM_CM NXDN2DMR
+cp external/MMDVM_CM/NXDN2DMR/NXDN2DMR $(location NXDN2DMR)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["NXDN2DMR"],
-    out_bin_dir = ".",
-    env = {
-        "CXX": "/usr/bin/g++"
-    },
-    postfix_script = "cp NXDN2DMR/NXDN2DMR $INSTALLDIR",
 )

@@ -1,17 +1,12 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "DMRGateway-bin",
     srcs = glob(["**"]),
-)
+    outs = ["DMRGateway"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "DMRGateway",
-    targets = ["DMRGateway"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/DMRGateway DMRGateway
+cp external/DMRGateway/DMRGateway $(location DMRGateway)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["DMRGateway"],
-    out_bin_dir = ".",
-    postfix_script = "cp DMRGateway $INSTALLDIR",
 )

@@ -5,91 +5,106 @@ filegroup(
     srcs = glob(["**"]),
 )
 
-make(
-    name = "ircddbgatewayd",
-    targets = ["ircDDBGateway/ircddbgatewayd"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "ircddbgatewayd-bin",
+    srcs = glob(["**"]),
+    outs = ["ircddbgatewayd"],
+    cmd = """
+set -euo pipefail
+
+make -C external/ircDDBGateway ircDDBGateway/ircddbgatewayd CXXFLAGS="-DDCS_LINK -DDEXTRA_LINK -DUSE_GPSD"
+cp external/ircDDBGateway/ircDDBGateway/ircddbgatewayd $(location ircddbgatewayd)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["ircddbgatewayd"],
-    out_bin_dir = ".",
-    postfix_script = "cp ircDDBGateway/ircddbgatewayd $INSTALLDIR",
-    copts = ["-DDCS_LINK", "-DDEXTRA_LINK", "-DUSE_GPSD"],
 )
 
-make(
-    name = "aprstransmitd",
-    targets = ["APRSTransmit/aprstransmitd"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "aprstransmitd-bin",
+    srcs = glob(["**"]),
+    outs = ["aprstransmitd"],
+    cmd = """
+set -euo pipefail
+
+make -C external/ircDDBGateway APRSTransmit/aprstransmitd
+cp external/ircDDBGateway/APRSTransmit/aprstransmitd $(location aprstransmitd)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["aprstransmitd"],
-    out_bin_dir = ".",
-    postfix_script = "cp APRSTransmit/aprstransmitd $INSTALLDIR",
 )
 
-make(
-    name = "remotecontrold",
-    targets = ["RemoteControl/remotecontrold"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "remotecontrold-bin",
+    srcs = glob(["**"]),
+    outs = ["remotecontrold"],
+    cmd = """
+set -euo pipefail
+
+make -C external/ircDDBGateway RemoteControl/remotecontrold
+cp external/ircDDBGateway/RemoteControl/remotecontrold $(location remotecontrold)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["remotecontrold"],
-    out_bin_dir = ".",
-    postfix_script = "cp RemoteControl/remotecontrold $INSTALLDIR",
 )
 
-make(
-    name = "starnetserverd",
-    targets = ["StarNetServer/starnetserverd"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "starnetserverd-bin",
+    srcs = glob(["**"]),
+    outs = ["starnetserverd"],
+    cmd = """
+set -euo pipefail
+
+make -C external/ircDDBGateway StarNetServer/starnetserverd
+cp external/ircDDBGateway/StarNetServer/starnetserverd $(location starnetserverd)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["starnetserverd"],
-    out_bin_dir = ".",
-    postfix_script = "cp StarNetServer/starnetserverd $INSTALLDIR",
 )
 
-make(
-    name = "texttransmitd",
-    targets = ["TextTransmit/texttransmitd"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "texttransmitd-bin",
+    srcs = glob(["**"]),
+    outs = ["texttransmitd"],
+    cmd = """
+set -euo pipefail
+
+make -C external/ircDDBGateway TextTransmit/texttransmitd
+cp external/ircDDBGateway/TextTransmit/texttransmitd $(location texttransmitd)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["texttransmitd"],
-    out_bin_dir = ".",
-    postfix_script = "cp TextTransmit/texttransmitd $INSTALLDIR",
 )
 
-make(
-    name = "timercontrold",
-    targets = ["TimerControl/timercontrold"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "timercontrold-bin",
+    srcs = glob(["**"]),
+    outs = ["timercontrold"],
+    cmd = """
+set -euo pipefail
+
+make -C external/ircDDBGateway TimerControl/timercontrold
+cp external/ircDDBGateway/TimerControl/timercontrold $(location timercontrold)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["timercontrold"],
-    out_bin_dir = ".",
-    postfix_script = "cp TimerControl/timercontrold $INSTALLDIR",
 )
 
-make(
-    name = "timeserverd",
-    targets = ["TimeServer/timeserverd"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "timeserverd-bin",
+    srcs = glob(["**"]),
+    outs = ["timeserverd"],
+    cmd = """
+set -euo pipefail
+
+make -C external/ircDDBGateway TimeServer/timeserverd
+cp external/ircDDBGateway/TimeServer/timeserverd $(location timeserverd)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["timeserverd"],
-    out_bin_dir = ".",
-    postfix_script = "cp TimeServer/timeserverd $INSTALLDIR",
 )
 
-make(
-    name = "voicetransmitd",
-    targets = ["VoiceTransmit/voicetransmitd"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "voicetransmitd-bin",
+    srcs = glob(["**"]),
+    outs = ["voicetransmitd"],
+    cmd = """
+set -euo pipefail
+
+make -C external/ircDDBGateway VoiceTransmit/voicetransmitd
+cp external/ircDDBGateway/VoiceTransmit/voicetransmitd $(location voicetransmitd)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["voicetransmitd"],
-    out_bin_dir = ".",
-    postfix_script = "cp VoiceTransmit/voicetransmitd $INSTALLDIR",
 )

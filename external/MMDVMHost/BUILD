@@ -5,36 +5,45 @@ filegroup(
     srcs = glob(["**"]),
 )
 
-make(
-    name = "MMDVMHost",
-    targets = ["MMDVMHost"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "MMDVMHost-bin",
+    srcs = glob(["**"]),
+    outs = ["MMDVMHost"],
+    cmd = """
+set -euo pipefail
+
+make -C external/MMDVMHost MMDVMHost
+cp external/MMDVMHost/MMDVMHost $(location MMDVMHost)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["MMDVMHost"],
-    out_bin_dir = ".",
-    postfix_script = "cp MMDVMHost $INSTALLDIR",
 )
 
-make(
-    name = "MMDVMHost_Adafruit",
-    targets = ["MMDVMHost"],
-    args = ["-j$$(nproc) -f Makefile.Pi.Adafruit"],
-    lib_source = ":all_srcs",
+files = glob(["**"])
+files.extend(["@WiringPi//:libwiringPi", "@WiringPi//:libwiringPiDev", "@WiringPi//:WiringPiHeaders-group", "@WiringPi//:WiringPiDevHeaders-group"])
+
+genrule(
+    name = "MMDVMHost_Adafruit-bin",
+    srcs = files,
+    outs = ["MMDVMHost_Adafruit"],
+    cmd = """
+set -euo pipefail
+
+export CFLAGS="-I$$(pwd)/external/WiringPi/wiringPi -I$$(pwd)/external/WiringPi/devLib -L$$(pwd)/$(BINDIR)/external/WiringPi"
+make -f Makefile.Pi.Adafruit -C external/MMDVMHost MMDVMHost CFLAGS="$${CFLAGS}"
+cp external/MMDVMHost/MMDVMHost $(location MMDVMHost_Adafruit)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["MMDVMHost_Adafruit"],
-    out_bin_dir = ".",
-    postfix_script = "cp MMDVMHost $INSTALLDIR/MMDVMHost_Adafruit",
-    deps = [ "@WiringPi//:WiringPi", "@WiringPi//:WiringPiDev", "@WiringPi//:WiringPiHeaders", "@WiringPi//:WiringPiDevHeaders" ],
 )
 
-make(
-    name = "RemoteCommand",
-    targets = ["RemoteCommand"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "RemoteCommand-bin",
+    srcs = glob(["**"]),
+    outs = ["RemoteCommand"],
+    cmd = """
+set -euo pipefail
+
+make -C external/MMDVMHost RemoteCommand
+cp external/MMDVMHost/RemoteCommand $(location RemoteCommand)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["RemoteCommand"],
-    out_bin_dir = ".",
-    postfix_script = "cp RemoteCommand $INSTALLDIR",
 )

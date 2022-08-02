@@ -1,17 +1,12 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "MMDVMCal-bin",
     srcs = glob(["**"]),
-)
+    outs = ["MMDVMCal"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "MMDVMCal",
-    targets = ["MMDVMCal"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/MMDVMCal MMDVMCal
+cp external/MMDVMCal/MMDVMCal $(location MMDVMCal)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["MMDVMCal"],
-    out_bin_dir = ".",
-    postfix_script = "cp MMDVMCal $INSTALLDIR",
 )

@@ -1,54 +1,56 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
+cc_library(
+    name = "WiringPiHeaders",
+    hdrs = glob(["wiringPi/*.h"]),
+    visibility = ["//visibility:public"],
+    includes = ["wiringPi"],
+)
 
 filegroup(
-    name = "all_srcs",
-    srcs = glob(["**"]),
-)
-
-make(
-    name = "WiringPi",
-    targets = ["all"],
-    args = ["-j$$(nproc) -C wiringPi"],
-    lib_source = ":all_srcs",
+    name = "WiringPiHeaders-group",
+    srcs = glob(["wiringPi/*.h"]),
     visibility = ["//visibility:public"],
-    out_shared_libs = ["libwiringPi.so"],
-    out_lib_dir = ".",
-    out_include_dir = ".",
-    postfix_script = "cp -v wiringPi/libwiringPi.so.* $INSTALLDIR/libwiringPi.so",
 )
 
-make(
-    name = "WiringPiHeaders",
-    targets = ["clean"],
-    args = ["-j$$(nproc) -C wiringPi"],
-    lib_source = ":all_srcs",
-    visibility = ["//visibility:public"],
-    out_headers_only = True,
-    out_include_dir = ".",
-    postfix_script = "cp -v wiringPi/*.h $INSTALLDIR",
-)
-
-make(
-    name = "WiringPiDev",
-    targets = ["all"],
-    args = ["-j$$(nproc) -C devLib"],
-    lib_source = ":all_srcs",
-    visibility = ["//visibility:public"],
-    out_shared_libs = ["libwiringPiDev.so"],
-    out_bin_dir = ".",
-    out_include_dir = ".",
-    out_lib_dir = ".",
-    postfix_script = "cp devLib/libwiringPiDev.so.* $INSTALLDIR/libwiringPiDev.so",
-    deps = [ ":WiringPi", ":WiringPiHeaders" ],
-)
-
-make(
+cc_library(
     name = "WiringPiDevHeaders",
-    targets = ["clean"],
-    args = ["-j$$(nproc) -C wiringPi"],
-    lib_source = ":all_srcs",
+    hdrs = glob(["devLib/*.h"]),
     visibility = ["//visibility:public"],
-    out_headers_only = True,
-    out_include_dir = ".",
-    postfix_script = "cp -v devLib/*.h $INSTALLDIR",
+)
+
+filegroup(
+    name = "WiringPiDevHeaders-group",
+    srcs = glob(["devLib/*.h"]),
+    visibility = ["//visibility:public"],
+)
+
+headers = [":WiringPiDevHeaders", ":WiringPiHeaders"]
+files = glob(["**"])
+files.extend(headers)
+
+genrule(
+    name = "libwiringPi",
+    srcs = files,
+    outs = ["libwiringPi.so"],
+    cmd = """
+set -euo pipefail
+
+make -C external/WiringPi/wiringPi all
+cp external/WiringPi/wiringPi/libwiringPi.so.* $(location libwiringPi.so)
+""",
+    visibility = ["//visibility:public"],
+)
+
+files.extend([":libwiringPi"])
+
+genrule(
+    name = "libwiringPiDev",
+    srcs = files,
+    outs = ["libwiringPiDev.so"],
+    cmd = """
+set -euo pipefail
+
+make -C external/WiringPi/devLib all CFLAGS="-I$$(pwd)/external/WiringPi/wiringPi" LDFLAGS="-L$$(pwd)/$(BINDIR)/external/WiringPi"
+cp external/WiringPi/devLib/libwiringPiDev.so.* $(location libwiringPiDev.so)
+""",
+    visibility = ["//visibility:public"],
 )

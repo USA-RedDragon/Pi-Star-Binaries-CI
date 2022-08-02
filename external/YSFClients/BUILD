@@ -1,39 +1,38 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "DGIdGateway-bin",
     srcs = glob(["**"]),
+    outs = ["DGIdGateway"],
+    cmd = """
+set -euo pipefail
+
+make -C external/YSFClients DGIdGateway
+cp external/YSFClients/DGIdGateway/DGIdGateway $(location DGIdGateway)
+""",
+    visibility = ["//visibility:public"],
 )
 
-make(
-    name = "DGIdGateway",
-    targets = ["DGIdGateway"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+genrule(
+    name = "YSFGateway-bin",
+    srcs = glob(["**"]),
+    outs = ["YSFGateway"],
+    cmd = """
+set -euo pipefail
+
+make -C external/YSFClients YSFGateway
+cp external/YSFClients/YSFGateway/YSFGateway $(location YSFGateway)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["DGIdGateway"],
-    out_bin_dir = ".",
-    postfix_script = "cp DGIdGateway/DGIdGateway $INSTALLDIR",
 )
 
-make(
-    name = "YSFGateway",
-    targets = ["YSFGateway"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
-    visibility = ["//visibility:public"],
-    out_binaries = ["YSFGateway"],
-    out_bin_dir = ".",
-    postfix_script = "cp YSFGateway/YSFGateway $INSTALLDIR",
-)
+genrule(
+    name = "YSFParrot-bin",
+    srcs = glob(["**"]),
+    outs = ["YSFParrot"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "YSFParrot",
-    targets = ["YSFParrot"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/YSFClients YSFParrot
+cp external/YSFClients/YSFParrot/YSFParrot $(location YSFParrot)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["YSFParrot"],
-    out_bin_dir = ".",
-    postfix_script = "cp YSFParrot/YSFParrot $INSTALLDIR",
 )

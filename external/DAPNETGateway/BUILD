@@ -1,17 +1,12 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "DAPNETGateway-bin",
     srcs = glob(["**"]),
-)
+    outs = ["DAPNETGateway"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "DAPNETGateway",
-    targets = ["DAPNETGateway"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/DAPNETGateway DAPNETGateway
+cp external/DAPNETGateway/DAPNETGateway $(location DAPNETGateway)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["DAPNETGateway"],
-    out_bin_dir = ".",
-    postfix_script = "cp DAPNETGateway $INSTALLDIR",
 )

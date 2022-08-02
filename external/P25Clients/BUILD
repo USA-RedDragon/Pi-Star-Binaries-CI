@@ -1,28 +1,25 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
-
-filegroup(
-    name = "all_srcs",
+genrule(
+    name = "P25Gateway-bin",
     srcs = glob(["**"]),
+    outs = ["P25Gateway"],
+    cmd = """
+set -euo pipefail
+
+make -C external/P25Clients P25Gateway
+cp external/P25Clients/P25Gateway/P25Gateway $(location P25Gateway)
+""",
+    visibility = ["//visibility:public"],
 )
 
-make(
-    name = "P25Gateway",
-    targets = ["P25Gateway"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
-    visibility = ["//visibility:public"],
-    out_binaries = ["P25Gateway"],
-    out_bin_dir = ".",
-    postfix_script = "cp P25Gateway/P25Gateway $INSTALLDIR",
-)
+genrule(
+    name = "P25Parrot-bin",
+    srcs = glob(["**"]),
+    outs = ["P25Parrot"],
+    cmd = """
+set -euo pipefail
 
-make(
-    name = "P25Parrot",
-    targets = ["P25Parrot"],
-    args = ["-j$$(nproc)"],
-    lib_source = ":all_srcs",
+make -C external/P25Clients P25Parrot
+cp external/P25Clients/P25Parrot/P25Parrot $(location P25Parrot)
+""",
     visibility = ["//visibility:public"],
-    out_binaries = ["P25Parrot"],
-    out_bin_dir = ".",
-    postfix_script = "cp P25Parrot/P25Parrot $INSTALLDIR",
 )
