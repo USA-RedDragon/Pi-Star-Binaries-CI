@@ -1,6 +1,6 @@
 workspace(name = "Pi-Star-Binaries")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
 
 http_archive(
     name = "rules_foreign_cc",
@@ -40,6 +40,14 @@ rules_sh_dependencies()
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
 
+# Raspberry Pi OS Lite, armhf (all-Pi compatibility), latest rootfs
+http_file(
+    name = "raspi-os-lite-armhf",
+    urls = ["https://downloads.raspberrypi.org/raspios_lite_armhf/root.tar.xz"],
+    downloaded_file_path = "root.tar.xz",
+)
+
+# Third party dependencies.
 new_git_repository(
     name = "AMBEserver",
     branch = "master",

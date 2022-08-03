@@ -1,6 +1,50 @@
 load("@rules_pkg//pkg:zip.bzl", "pkg_zip")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 
+constraint_setting(name = "build_platform")
+
+constraint_value(
+    name = "desktop-platform",
+    constraint_setting = ":build_platform",
+)
+
+constraint_value(
+    name = "pi-platform",
+    constraint_setting = ":build_platform",
+)
+
+constraint_value(
+    name = "pi64-platform",
+    constraint_setting = ":build_platform",
+)
+
+platform(
+    name = "desktop",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+        ":desktop-platform",
+    ],
+)
+
+platform(
+    name = "pi",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:arm",
+        ":pi-platform",
+    ],
+)
+
+platform(
+    name = "pi64",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:aarch64",
+        ":pi64-platform",
+    ],
+)
+
 pkg_files(
     name = "rpi-firmware",
     srcs = [
@@ -8,6 +52,11 @@ pkg_files(
     ],
     prefix = "boot",
     strip_prefix = strip_prefix.from_pkg(),
+    target_compatible_with = select({
+        ":pi-platform": [],
+        ":pi64-platform": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
 )
 
 pkg_files(
@@ -17,6 +66,11 @@ pkg_files(
     ],
     prefix = "boot",
     strip_prefix = strip_prefix.from_pkg(),
+    target_compatible_with = select({
+        ":pi-platform": [],
+        ":pi64-platform": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
 )
 
 pkg_files(
@@ -108,17 +162,26 @@ pkg_files(
     strip_prefix = strip_prefix.from_pkg(""),
 )
 
+common_package_srcs = [
+    ":wrappers",
+    ":binaries",
+    ":scripts",
+    ":libs",
+    ":dashboard",
+    "//platform:platformDetect",
+]
+
+pi_package_srcs = common_package_srcs + [
+    ":include-wiringPi",
+    ":rpi-firmware",
+    ":rpi-overlay-includes",
+]
+
 pkg_zip(
     name = "package",
-    srcs = [
-        ":wrappers",
-        ":binaries",
-        ":scripts",
-        ":libs",
-        ":dashboard",
-        ":include-wiringPi",
-        "//platform:platformDetect",
-        ":rpi-firmware",
-        ":rpi-overlay-includes",
-    ],
+    srcs = select({
+        ":pi-platform": pi_package_srcs,
+        ":pi64-platform": pi_package_srcs,
+        ":desktop-platform": common_package_srcs,
+    }),
 )
