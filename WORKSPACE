@@ -40,6 +40,13 @@ rules_sh_dependencies()
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
 
+# Toolchains
+register_toolchains(
+    "//toolchains:clang-arm",
+    "//toolchains:clang-arm64",
+    "//toolchains:clang-desktop",
+)
+
 # Raspberry Pi OS Lite, armhf (all-Pi compatibility), latest rootfs
 http_file(
     name = "raspi-os-lite-armhf",

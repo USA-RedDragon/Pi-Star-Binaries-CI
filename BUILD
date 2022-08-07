@@ -6,16 +6,19 @@ constraint_setting(name = "build_platform")
 constraint_value(
     name = "desktop-platform",
     constraint_setting = ":build_platform",
+    visibility = ["//visibility:public"],
 )
 
 constraint_value(
     name = "pi-platform",
     constraint_setting = ":build_platform",
+    visibility = ["//visibility:public"],
 )
 
 constraint_value(
     name = "pi64-platform",
     constraint_setting = ":build_platform",
+    visibility = ["//visibility:public"],
 )
 
 platform(

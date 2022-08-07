@@ -34,10 +34,14 @@ genrule(
     cmd = """
 set -euo pipefail
 
+export CC="$(CC)"
+export EXTRA_CFLAGS="$(CFLAGS)"
+export LDFLAGS="$(LDFLAGS)"
 make -C external/WiringPi/wiringPi all
 cp external/WiringPi/wiringPi/libwiringPi.so.* $(location libwiringPi.so)
 """,
     visibility = ["//visibility:public"],
+    toolchains = ["@bazel_tools//tools/cpp:current_cc_toolchain"],
 )
 
 files.extend([":libwiringPi"])
@@ -49,8 +53,12 @@ genrule(
     cmd = """
 set -euo pipefail
 
+export CC="$(CC)"
+export EXTRA_CFLAGS="$(CFLAGS)"
+export LDFLAGS="$(LDFLAGS)"
 make -C external/WiringPi/devLib all CFLAGS="-I$$(pwd)/external/WiringPi/wiringPi" LDFLAGS="-L$$(pwd)/$(BINDIR)/external/WiringPi"
 cp external/WiringPi/devLib/libwiringPiDev.so.* $(location libwiringPiDev.so)
 """,
     visibility = ["//visibility:public"],
+    toolchains = ["@bazel_tools//tools/cpp:current_cc_toolchain"],
 )
