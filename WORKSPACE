@@ -4,9 +4,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file"
 
 http_archive(
     name = "rules_foreign_cc",
-    sha256 = "fdd50cb26da8f8492ea2ce2e95557ea5cb36f278354d97e3edbc6805dc430d2f",
-    strip_prefix = "rules_foreign_cc-56a40a3783d4779be915c5f3dbdbe54029020531",
-    url = "https://github.com/bazelbuild/rules_foreign_cc/archive/56a40a3783d4779be915c5f3dbdbe54029020531.tar.gz",
+    sha256 = "2676a49ef41b9a735f049b61859b0dfae8d56e457535b438d4ce81488de33f05",
+    strip_prefix = "rules_foreign_cc-d92732ef4e8b7851abb9d73c1e3577bf366a73e4",
+    url = "https://github.com/bazelbuild/rules_foreign_cc/archive/d92732ef4e8b7851abb9d73c1e3577bf366a73e4.tar.gz",
 )
 
 load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
